@@ -289,8 +289,23 @@ void RaidCalc::on_finder_timer_timeout()
     ui.actionExportSeeds->setEnabled(!finder.seeds.empty());
 }
 
+constexpr const char* GameToString(Game e) throw()
+{
+    switch (e)
+    {
+    case Game::GameScarlet: return "Scarlet";
+    case Game::GameViolet: return "Violet";
+    default: throw std::invalid_argument("Unimplemented item");
+    }
+}
+
 void RaidCalc::on_actionExportSeeds_triggered(bool checked)
 {
+    std::string eventid = event_names[ui.comboBoxEvent->currentIndex() - 1];
+    if (ui.comboBoxEvent->currentIndex() - 1 < 0)
+        eventid = "None";
+    std::string stars = std::to_string(ui.comboBoxStars->currentIndex() + 1);
+
     QString path = QFileDialog::getSaveFileName(this, QString(), QString(), "Comma separated values (*.csv)");
     if (path.isEmpty())
         return;
@@ -305,11 +320,16 @@ void RaidCalc::on_actionExportSeeds_triggered(bool checked)
     int columns = seedModel.columnCount();
     for (int i = 0; i < columns; ++i)
         buffer += seedModel.headerData(i, Qt::Horizontal).toString().toStdString() + ",";
+    buffer += "Game,Event,Stars,";
     buffer[buffer.size() - 1] = '\n';
     for (int i = 0; i < rows; ++i)
     {
         for (int j = 0; j < columns; ++j)
             buffer += seedModel.data(seedModel.index(i, j)).toString().toStdString() + ",";
+        buffer += GameToString((Game)ui.comboBoxGame->currentIndex());
+        buffer += ",";
+        buffer += eventid + ",";
+        buffer += stars + ",";
         buffer[buffer.size() - 1] = '\n';
         if (buffer.size() > MaxBufferSize)
         {
