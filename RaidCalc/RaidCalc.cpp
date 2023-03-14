@@ -301,9 +301,9 @@ constexpr const char* GameToString(Game e) throw()
 
 void RaidCalc::on_actionExportSeeds_triggered(bool checked)
 {
-    std::string eventid = event_names[ui.comboBoxEvent->currentIndex() - 1];
-    if (ui.comboBoxEvent->currentIndex() - 1 < 0)
-        eventid = "None";
+    std::string eventid = "None";
+    if (ui.comboBoxEvent->currentIndex() != 0)
+        event_names[ui.comboBoxEvent->currentIndex() - 1];
     std::string stars = std::to_string(ui.comboBoxStars->currentIndex() + 1);
 
     QString path = QFileDialog::getSaveFileName(this, QString(), QString(), "Comma separated values (*.csv)");
