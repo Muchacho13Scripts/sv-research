@@ -16,4 +16,6 @@ static const char *event_names[] =
     "Decidueye the Unrivaled",
     "Blissey Spotlight",
     "Samurott the Unrivaled",
+    "Ditto Spotlight",
+    "Typhlosion the Unrivaled",
 };
